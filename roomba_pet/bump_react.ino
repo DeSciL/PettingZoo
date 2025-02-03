@@ -15,6 +15,30 @@ int freeRAM(){
   return(int)&v-(__brkval==0?(int)&__heap_start:(int)__brkval);
 }
 */
+
+// Play melody via built-in speaker (only single-channel notes)
+// https://github.com/Mjrovai/Roomba_BT_Ctrl/blob/a77f5f44a29bdc90cb913012176c79903b44bc05/roombaMainCtrl_BT_V1_1/generalRoombaFunctions.ino#L64
+void playSoundMjrovai (int num) 
+{
+  switch (num)
+  { 
+    case 1: 
+      Roomba.write("\x8c\x01\x04\x42\x20\x3e\x20\x42\x20\x3e\x20"); // [140] [1] [4] [68] [32] ... place "start sound" in slot 1
+      Roomba.write("\x8d\x01"); // [141] [1] play it (in slot 1)
+      break;
+ 
+    case 2: 
+      Roomba.write("\x8c\x01\x01\x3c\x20"); // place "low freq sound" in slot 2
+      Roomba.write("\x8d\x01"); // play it (in slot 2)
+      break;
+
+    case 3:
+      Roomba.write("\x8c\x01\x01\x48\x20"); // place "high freq sound" in slot 3
+      Roomba.write("\x8d\x01"); // play it (in slot 3)
+      break;
+  }
+}
+
 void playSound()
 {  
   //This functions reads the soundFile and plays it
