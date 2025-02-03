@@ -1,6 +1,6 @@
  void readSDSettings(){
    // reads the personality setting
-   File confFile = SD.open(F("config.txt"));
+   FILE confFile = sdOpen("config.txt");
    String check;
    if (confFile) {
      if (confFile.available()) { 
