@@ -6,8 +6,9 @@
 #include <SPI.h>
 #include <avr/pgmspace.h>
 
+#include "config.h"
+
 #define DEBUG false
-#define SPARK_FUN_MP3 true
 
 int bumpPin = 4;
 int ledPin = 8;

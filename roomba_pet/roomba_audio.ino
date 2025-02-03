@@ -1,10 +1,9 @@
-#if defined(SPARK_FUN_MP3)
-#define ENABLE_DEDICATED_SPI 0
+#include "config.h"
 
+#if defined(SPARK_FUN_MP3)
 vs1053 MP3player;
 
-#else
-
+#elif defined(TMR_PCM)
 #include <SD.h>     // required library: SD by Arduino, SparkFun
 #include <TMRpcm.h> // required library: TMRpcm by TMRh20
 
