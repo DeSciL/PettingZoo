@@ -3,14 +3,19 @@
 //* on bump as long as there is enough battery.
 
 #include <SoftwareSerial.h>
-#include <SD.h>
-#include <TMRpcm.h>
+#include <SD.h>             // required library: SD by Arduino, SparkFun
+#include <TMRpcm.h>         // required library: TMRpcm by TMRh20
 #include <SPI.h>
 #include <avr/pgmspace.h>
 
 #define DEBUG false
+
 int bumpPin = 4;
 int ledPin = 8;
+
+// int roombaRxPin = 6; int roombaTxPin = 7; // default
+int roombaRxPin = 0; int roombaTxPin = 1; // for SparkFun MP3 shield (DEV-12660)
+
 uint8_t personality = 1;     // The Personlity selector 
 uint8_t interval = 100;  
 uint8_t batteryLowCounter = 0;   // Counts how many consequent times the battery gave low indication or was on charge
@@ -18,10 +23,7 @@ char soundFile[13]; // space reserved for sound file
       
 // define wav file player library
 TMRpcm tmrpcm;
-// define the connection to roomba
-// Arduino rxPin = 6 to Pin 3 is Roomba TX.
-// Arduino txPin = 7 to Pin 4 is Roomba RX.
-SoftwareSerial Roomba(6, 7);  //rxPin,txPin
+SoftwareSerial Roomba(roombaRxPin, roombaTxPin); // define the connection to roomba
 void doStartMove();
 void updateSensor();
 bool checkLowBattery();
