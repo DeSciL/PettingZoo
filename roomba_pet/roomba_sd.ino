@@ -20,11 +20,11 @@ void sdSetup()
 #endif
 }
 
-file_t sdOpen(char* filename)
+file_t sdOpen(const char* filename)
 {
 #if defined(SPARK_FUN_MP3)
     return sd.open(filename);
 #else
-    return SD.open(F(filename));
+    return SD.open(filename);
 #endif
 }
