@@ -1,6 +1,8 @@
 #include "config.h"
 
-#if defined(SPARK_FUN_MP3)
+#if defined(ADAFRUIT_MP3)
+
+#elif defined(SPARK_FUN_MP3)
 sd_t sd;
 
 #elif defined(TMR_PCM)
@@ -8,7 +10,12 @@ sd_t sd;
 
 void sdSetup()
 {
-#if defined(SPARK_FUN_MP3)
+#if defined(ADAFRUIT_MP3)
+    if (!SD.begin(CARDCS)) {
+        Serial.println(F("SD failed, or not present"));
+        while (1);  // don't do anything more
+    }
+#elif defined(SPARK_FUN_MP3)
   if(!sd.begin(9, SPI_HALF_SPEED)) sd.initErrorHalt();
   if (!sd.chdir("/")) sd.errorHalt("sd.chdir");
 #else

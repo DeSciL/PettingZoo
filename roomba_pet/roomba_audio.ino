@@ -1,6 +1,11 @@
 #include "config.h"
 
-#if defined(SPARK_FUN_MP3)
+#if defined(ADAFRUIT_MP3)
+#include <Adafruit_VS1053.h>
+
+Adafruit_VS1053_FilePlayer musicPlayer = Adafruit_VS1053_FilePlayer(BREAKOUT_RESET, BREAKOUT_CS, BREAKOUT_DCS, DREQ, CARDCS); // create breakout-example object!
+
+#elif defined(SPARK_FUN_MP3)
 vs1053 MP3player;
 
 #elif defined(TMR_PCM)
@@ -12,7 +17,26 @@ TMRpcm tmrpcm; // define wav file player library
 
 void audioSetup()
 {
-#if defined(SPARK_FUN_MP3)
+#if defined(ADAFRUIT_MP3)
+    if (! musicPlayer.begin()) { // initialise the music player
+        Serial.println(F("Couldn't find VS1053, do you have the right pins defined?"));
+        while (1);
+    }
+    Serial.println(F("VS1053 found"));
+
+    musicPlayer.setVolume(20,20);
+
+    // Timer interrupts are not suggested, better to use DREQ interrupt!
+    //musicPlayer.useInterrupt(VS1053_FILEPLAYER_TIMER0_INT); // timer int
+
+    // If DREQ is on an interrupt pin (on uno, #2 or #3) we can do background audio playing
+    musicPlayer.useInterrupt(VS1053_FILEPLAYER_PIN_INT);
+
+    Serial.println(F("playing file..."));
+    // musicPlayer.startPlayingFile("/sndFear1.wav");
+    musicPlayer.playFullFile("/sndFear1.wav");
+    Serial.println(F("...done"));
+#elif defined(SPARK_FUN_MP3)
     MP3player.begin();
     MP3player.setVolume(10, 10);
 #else
@@ -25,7 +49,11 @@ void audioSetup()
 
 void audioPlay(char *soundFile)
 {
-#if defined(SPARK_FUN_MP3)
+#if defined(ADAFRUIT_MP3)
+    // Play another file in the background, REQUIRES interrupts!
+    musicPlayer.startPlayingFile(soundFile);
+
+#elif defined(SPARK_FUN_MP3)
     int8_t result = MP3player.playMP3(soundFile);
     // check result, see readme for error codes.
     if (result != 0)
@@ -48,7 +76,8 @@ void audioPlay(char *soundFile)
 
 void audioLoop()
 {
-#if defined(SPARK_FUN_MP3)
+#if defined(ADAFRUIT_MP3)
+#elif defined(SPARK_FUN_MP3)
     // Below is only needed if not interrupt driven. Safe to remove if not using.
     #if defined(USE_MP3_REFILL_MEANS) && ( (USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer) ||   (USE_MP3_REFILL_MEANS == USE_MP3_Polled))
     MP3player.available();
@@ -59,7 +88,9 @@ void audioLoop()
 
 bool audioIsPlaying()
 {
-#if defined(SPARK_FUN_MP3)
+#if defined(ADAFRUIT_MP3)
+    return musicPlayer.playingMusic;
+#elif defined(SPARK_FUN_MP3)
     return MP3player.isPlaying();
 #else
     return tmrpcm.isPlaying();
@@ -68,7 +99,9 @@ bool audioIsPlaying()
 
 bool audioStop()
 {
-#if defined(SPARK_FUN_MP3)
+#if defined(ADAFRUIT_MP3)
+    musicPlayer.stopPlaying(); // stop playing the file
+#elif defined(SPARK_FUN_MP3)
     MP3player.stopTrack();
 #else
     digitalWrite(tmrpcm.speakerPin, LOW);

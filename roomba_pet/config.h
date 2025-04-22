@@ -1,10 +1,25 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define SPARK_FUN_MP3 true
+#define ADAFRUIT_MP3 true
+//#define SPARK_FUN_MP3 true
 //#define TMR_PCM true
 
-#if defined(SPARK_FUN_MP3)
+#if defined(ADAFRUIT_MP3)
+#include <SPI.h>
+#include <SD.h>
+
+#define BREAKOUT_RESET  8 // RST, VS1053 reset pin (output)
+#define BREAKOUT_CS     3 // CS, VS1053 chip select pin (output)
+#define BREAKOUT_DCS    4 // XDCS, VS1053 Data/command select pin (output)
+
+#define DREQ 2            // DREQ, VS1053 Data request, ideally an Interrupt pin, see http://arduino.cc/en/Reference/attachInterrupt
+
+#define CARDCS 9     // SDCS, Card chip select pin
+
+typedef File file_t;
+
+#elif defined(SPARK_FUN_MP3)
 
 // Note: Uno will not support SD_FAT_TYPE = 3.
 // SD_FAT_TYPE = 0 for SdFat/File as defined in SdFatConfig.h, 1 for FAT16/FAT32, 2 for exFAT, 3 for FAT16/FAT32 and exFAT.
