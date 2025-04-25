@@ -10,8 +10,14 @@
 
 #define DEBUG false
 
+#if defined(ADAFRUIT_MP3)
+// Avoid writing debug output to pins used for the audio breakout board: Breaks audio output and causes clicking noise.
+int bumpPin = 0;
+int ledPin = 1;
+#else
 int bumpPin = 4;
 int ledPin = 8;
+#endif
 
 #if defined(SPARK_FUN_MP3)
 int roombaRxPin = 0;
@@ -80,10 +86,14 @@ void (*resetFunc)(void) = 0;
 void loop()
 {
     audioLoop();
+
+#if defined(TMR_PCM)
+    // Not required for audio boards
     if (!audioIsPlaying())
     {
         audioStop();
     }
+#endif
 
     if (interval > 0)
     {
