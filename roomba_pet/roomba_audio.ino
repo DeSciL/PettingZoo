@@ -32,9 +32,8 @@ void audioSetup()
     // If DREQ is on an interrupt pin (on uno, #2 or #3) we can do background audio playing
     musicPlayer.useInterrupt(VS1053_FILEPLAYER_PIN_INT);
 
-    Serial.println(F("playing file..."));
-    // musicPlayer.startPlayingFile("/sndFear1.wav");
-    musicPlayer.playFullFile("/sndFear1.wav");
+    Serial.println(F("playing test audio file..."));
+    musicPlayer.startPlayingFile("track002.mp3");
     Serial.println(F("...done"));
 #elif defined(SPARK_FUN_MP3)
     MP3player.begin();
@@ -50,8 +49,14 @@ void audioSetup()
 void audioPlay(char *soundFile)
 {
 #if defined(ADAFRUIT_MP3)
+    Serial.print(F("audioPlay: "));
+    Serial.println(soundFile);
+
     // Play another file in the background, REQUIRES interrupts!
     musicPlayer.startPlayingFile(soundFile);
+
+    // Synchronous variant
+    // musicPlayer.playFullFile(soundFile);
 
 #elif defined(SPARK_FUN_MP3)
     int8_t result = MP3player.playMP3(soundFile);
