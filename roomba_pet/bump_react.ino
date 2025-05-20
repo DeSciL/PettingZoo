@@ -40,15 +40,8 @@ void playSoundMjrovai (int num)
 }
 
 void playSound()
-{  
-  //This functions reads the soundFile and plays it
-  // Just be sure there to switch off what was playing before
-  digitalWrite(tmrpcm.speakerPin, LOW);
-  tmrpcm.disable();
-  delay(200);
-  tmrpcm.play(soundFile);
-  delay(300);
-  tmrpcm.loop(0);
+{
+    audioPlay(soundFile);
 }
 
 
