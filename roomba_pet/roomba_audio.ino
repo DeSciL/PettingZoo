@@ -24,7 +24,8 @@ void audioSetup()
     }
     Serial.println(F("VS1053 found"));
 
-    musicPlayer.setVolume(20,20);
+    // Set maximum volume (0 = max, 255 = min)
+    musicPlayer.setVolume(0, 0);
 
     // Timer interrupts are not suggested, better to use DREQ interrupt!
     //musicPlayer.useInterrupt(VS1053_FILEPLAYER_TIMER0_INT); // timer int
