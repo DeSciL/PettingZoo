@@ -1,9 +1,10 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define ADAFRUIT_MP3 true
-//#define SPARK_FUN_MP3 true
-//#define TMR_PCM true
+// Select audio hardware, only one at a time
+#define ADAFRUIT_MP3 true       // final
+//#define SPARK_FUN_MP3 true    // evaluated //TODO: test/fix
+//#define TMR_PCM true          // original
 
 #if defined(ADAFRUIT_MP3)
 #include <SPI.h>
